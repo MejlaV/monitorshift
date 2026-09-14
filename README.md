@@ -13,6 +13,21 @@ phone ──USB── Pi Zero 2 W ──HDMI──▶ touch monitor
                   └──USB hub── monitor touch, keyboard, mouse
 ```
 
+## Who this is for
+
+**An old phone with a broken screen that cannot mirror its display any other
+way.** Most mid-range phones (Galaxy A-series, Redmi, Moto…) have no USB-C
+video output, so no DeX, no HDMI adapter, no dock. Once the screen dies the
+phone is usually thrown away even though everything else works. MonitorShift
+gives it a screen and touch again for the price of a Pi Zero, and turns it into
+a kids' / kitchen / workshop computer.
+
+The touch monitor is the nice version, not a requirement. **A plain monitor
+plus a USB mouse and keyboard in the hub works exactly the same** — scrcpy
+forwards mouse and keys too, and nothing in this repo assumes touch. The one
+thing that stays awkward either way is the phone's lock pattern after a reboot
+(see *Known limits*).
+
 Built because a Galaxy A52s had a half-dead display, no USB-C video out, and
 a family that still wanted to use it. Tested on Samsung A52s (Android 14),
 Raspberry Pi OS Lite trixie, Elo 1502L 15.6" touch monitor (1366×768).
@@ -33,7 +48,8 @@ Raspberry Pi OS Lite trixie, Elo 1502L 15.6" touch monitor (1366×768).
 - Raspberry Pi Zero 2 W (any Pi works; Zero 2 W is the cheapest that copes)
 - micro-USB OTG adapter → **powered** USB hub (USB-C dock with PD passthrough works; it also powers the Pi through the data port)
 - mini-HDMI → HDMI to the monitor
-- touch monitor whose touch is a USB HID digitizer (Elo 1502L here; most are)
+- a monitor — touch (USB HID digitizer, Elo 1502L here; most are) **or any
+  monitor with a USB mouse and keyboard in the hub**
 - the phone: USB debugging enabled, that's all
 - a holder that fixes the phone to the monitor's VESA mount, so they rotate together — STLs in [`hardware/`](hardware/)
 

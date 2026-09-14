@@ -6,6 +6,13 @@ telefon po USB na dotykový monitor a dotyky posílá zpátky. Kabel dovnitř �
 funguje; kabel ven — telefon se do 10 s sám vrátí do normálu. Otočíš monitor,
 obraz se otočí s ním. Bez rootu, bez aplikace v telefonu.
 
+**Pro koho:** starý telefon s rozbitým displejem, který **neumí obraz ven**
+jinak — většina telefonů střední třídy nemá video výstup přes USB-C, takže
+žádný DeX ani HDMI redukce. Místo vyhození z něj vznikne počítač pro děti nebo
+do kuchyně. Dotykový monitor je luxus, ne podmínka: **obyčejný monitor + myš
+a klávesnice v hubu fungují úplně stejně.** Jediná nepříjemnost v obou
+případech je gesto zámku po restartu telefonu (viz *Known limits*).
+
 Vzniklo kvůli Galaxy A52s s napůl mrtvým displejem, který rodina chtěla dál
 používat. Anglické README má všechno podstatné; tady jen to, co je jinak
 česky v kódu:
