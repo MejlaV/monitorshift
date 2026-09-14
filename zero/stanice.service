@@ -1,0 +1,22 @@
+[Unit]
+Description=scrcpy stanice - zrcadli Android z USB na HDMI
+After=multi-user.target
+Conflicts=getty@tty1.service
+
+[Service]
+User=pi
+Group=pi
+SupplementaryGroups=video input render tty plugdev
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/stanice.sh
+Restart=always
+RestartSec=3
+StandardInput=tty
+StandardOutput=journal
+StandardError=journal
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+
+[Install]
+WantedBy=multi-user.target
