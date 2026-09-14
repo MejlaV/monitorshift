@@ -60,7 +60,7 @@ Power: the phone gets 500 mA from the hub as a USB device. With the panel dimmed
 On a fresh Raspberry Pi OS Lite (with Wi-Fi and SSH set up):
 
 ```bash
-git clone https://github.com/rastamila/monitorshift.git
+git clone https://github.com/MejlaV/monitorshift.git
 cd monitorshift
 bash install.sh
 ```
@@ -148,4 +148,4 @@ logical coordinates. DeX needs USB-C video out, which mid-range phones lack.
 
 ## License
 
-MIT. Made by [rastamila](https://github.com/rastamila) with a lot of help from Claude.
+MIT. Made by [MejlaV](https://github.com/MejlaV) with a lot of help from Claude.
