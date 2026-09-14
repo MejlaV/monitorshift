@@ -4,6 +4,7 @@
 #   settings global stanice_aktivni = 1
 #   settings global stanice_orig_{size,density,timeout,stayon,jasmode,jas,rotace,userrot}
 MON_W=768; MON_H=1366            # monitor na vysku (Elo 1502L otoceny)
+CIL_DP=600                       # sirka v dp: >=600 prepne Chrome/YouTube do tabletoveho rozlozeni; vetsi cislo = mensi prvky
 HLIDAC_SRC=/home/pi/stanice_hlidac.sh
 HLIDAC_DST=/data/local/tmp/stanice_hlidac.sh
 LOG=${LOG:-/home/pi/stanice.log}
@@ -56,7 +57,7 @@ pripravit() {
         sput global stanice_aktivni 1
         return 2
     fi
-    local nd=$(( pd * MON_W / pw * 94 / 100 ))
+    local nd=$(( MON_W * 160 / CIL_DP ))
     adb -s "$SER" shell wm size ${MON_W}x${MON_H} >/dev/null
     adb -s "$SER" shell wm density $nd >/dev/null
     sput global stanice_aktivni 1

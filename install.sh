@@ -20,7 +20,7 @@ sudo apt-get update -q
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
     adb android-sdk-platform-tools-common git gcc pkg-config meson ninja-build \
     libsdl3-dev libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
-    libswresample-dev libusb-1.0-0-dev wget
+    libswresample-dev libusb-1.0-0-dev wget libdrm-tests python3-gpiozero
 
 echo "--- scrcpy $SCRCPY_VERSION (not packaged for Raspbian, build from source, ~2 min on Zero 2 W) ---"
 if ! scrcpy --version 2>/dev/null | grep -q "${SCRCPY_VERSION#v}"; then
@@ -42,15 +42,17 @@ sudo usermod -aG plugdev,video,input,render,tty "$USER"
 
 echo "--- station scripts -> /home/$USER ---"
 install -m 755 "$HERE/zero/stanice.sh" "$HERE/zero/stanice_lib.sh" "$HERE/zero/stanice_hlidac.sh" \
-               "$HERE/zero/pripravit.sh" "$HERE/zero/vratit.sh" ~/
+               "$HERE/zero/pripravit.sh" "$HERE/zero/vratit.sh" "$HERE/zero/spanek.sh" "$HERE/zero/tlacitko.py" ~/
+sed "s|/home/pi|/home/$USER|g; s|User=pi|User=$USER|; s|Group=pi|Group=$USER|" "$HERE/zero/tlacitko.service" | sudo tee /etc/systemd/system/tlacitko.service >/dev/null
 sed "s|/home/pi|/home/$USER|g" "$HERE/zero/stanice.service" | sudo tee /etc/systemd/system/stanice.service >/dev/null
 sudo sed -i "s|User=pi|User=$USER|; s|Group=pi|Group=$USER|" /etc/systemd/system/stanice.service
-[ "$USER" != pi ] && sed -i "s|/home/pi|/home/$USER|g" ~/stanice.sh ~/stanice_lib.sh ~/pripravit.sh ~/vratit.sh
+[ "$USER" != pi ] && sed -i "s|/home/pi|/home/$USER|g" ~/stanice.sh ~/stanice_lib.sh ~/pripravit.sh ~/vratit.sh ~/spanek.sh ~/tlacitko.py
 
 echo "--- service: takes over tty1, starts at boot ---"
 sudo systemctl daemon-reload
 sudo systemctl disable getty@tty1.service 2>/dev/null
-sudo systemctl enable stanice.service
+sudo systemctl enable stanice.service tlacitko.service
+sudo systemctl restart tlacitko.service
 sudo systemctl restart stanice.service
 sleep 3
 systemctl is-active stanice.service

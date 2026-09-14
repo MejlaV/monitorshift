@@ -98,6 +98,19 @@ turns the portrait panel into a full landscape frame. Monitor turned → Android
 draws landscape UI on the portrait panel, the same 90° makes it upright. Frame
 is always 1366×768, no black bars, touch mapped by scrcpy. No detection code.
 
+**Sleep button.** A push button on GPIO3 toggles `spanek.sh`: the phone's
+screen turns fully **off** (not just dim) without locking — the "lock after
+screen off" delay is set to its maximum — its Wi-Fi is switched off so a
+forgotten YouTube stops pulling data, mirroring stops and HDMI goes to DPMS
+off so the monitor sleeps by itself. Charging continues. Next press brings
+everything back in a few seconds. Without a button, `bash ~/spanek.sh` does
+the same.
+
+**Element size.** The profile sets the phone's density so the logical width is
+600 dp (`CIL_DP` in `stanice_lib.sh`) — the threshold where Chrome, YouTube
+and most apps switch to their tablet layout, which is what you want on a 15"
+screen. Bigger number = smaller elements.
+
 ## Files
 
 ```
@@ -108,6 +121,8 @@ zero/stanice_hlidac.sh           watchdog that runs inside the phone
 zero/stanice.service             systemd unit (tty1, restarts, groups)
 zero/99-android-monitorshift.rules  udev: Android in ADB mode readable without root
 zero/pripravit.sh  zero/vratit.sh   manual apply / revert, same library
+zero/spanek.sh                   sleep / wake toggle (phone screen off, Wi-Fi off, HDMI off)
+zero/tlacitko.py  zero/tlacitko.service   GPIO3 push button -> spanek.sh
 hardware/                        STL for the VESA phone holder
 ```
 
