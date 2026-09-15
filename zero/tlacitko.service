@@ -6,7 +6,6 @@ After=multi-user.target
 User=pi
 Group=pi
 SupplementaryGroups=gpio
-Environment=GPIOZERO_PIN_FACTORY=lgpio
 WorkingDirectory=/home/pi
 ExecStart=/usr/bin/python3 /home/pi/tlacitko.py
 Restart=always

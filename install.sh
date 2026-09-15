@@ -20,7 +20,7 @@ sudo apt-get update -q
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
     adb android-sdk-platform-tools-common git gcc pkg-config meson ninja-build \
     libsdl3-dev libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
-    libswresample-dev libusb-1.0-0-dev wget libdrm-tests python3-gpiozero python3-lgpio
+    libswresample-dev libusb-1.0-0-dev wget libdrm-tests python3-lgpio
 
 echo "--- scrcpy $SCRCPY_VERSION (not packaged for Raspbian, build from source, ~2 min on Zero 2 W) ---"
 if ! scrcpy --version 2>/dev/null | grep -q "${SCRCPY_VERSION#v}"; then
