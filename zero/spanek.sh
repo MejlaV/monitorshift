@@ -25,7 +25,8 @@ hdmi() {   # 0 = zapnout, 3 = vypnout (DRM DPMS)
 spat() {
     log "usinam ($SER)"
     sudo systemctl stop stanice.service
-    A settings put secure lock_screen_lock_after_timeout 2147483647
+    A settings put secure power_button_instantly_locks 0          # Samsung bere KEYCODE_SLEEP jako vypinac
+    A settings put secure lock_screen_lock_after_timeout 1800000  # 30 min = max, ktere Samsung prijme
     A svc wifi disable
     A input keyevent KEYCODE_SLEEP
     sleep 1
