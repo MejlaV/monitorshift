@@ -4,12 +4,16 @@
 #   bash ~/spanek.sh spat       uspat
 #   bash ~/spanek.sh vzbudit    probudit
 #
-# spat:    displej telefonu VYPNOUT (ne jen ztlumit), zamek nezacvakne (lock_after_timeout=max),
-#          Wi-Fi telefonu vypnout (YouTube nic nestahuje), zrcadleni zastavit, HDMI do DPMS off
+# spat:    panel telefonu VYPNOUT, ale telefon NEUSPAT - Samsung pri KEYCODE_SLEEP
+#          zamkne bez ohledu na nastaveni casovace. Proto panel vypina scrcpy
+#          (--turn-screen-off bez videa a okna), ktere behem spanku bezi a drzi ho
+#          vypnuty; Android zustava Awake, zamek nezacvakne. Wi-Fi telefonu vypnout
+#          (zapomenuty YouTube nic nestahuje), zrcadleni zastavit, HDMI do DPMS off
 #          -> monitor jde sam do standby. Nabijeni bezi dal.
-# vzbudit: HDMI zpet, Wi-Fi zpet, displej zapnout, zrcadleni spustit.
-STAV=/run/user/$(id -u)/stanice_spi
-[ -d "$(dirname "$STAV")" ] || STAV=/tmp/stanice_spi
+# vzbudit: scrcpy-drzak ukoncit (panel se zapne), HDMI zpet, Wi-Fi zpet, zrcadleni spustit.
+RUN=/run/user/$(id -u); [ -d "$RUN" ] || RUN=/tmp
+STAV=$RUN/stanice_spi
+PIDF=$RUN/stanice_drzak.pid
 LOG=/home/pi/stanice.log
 log() { echo "$(date '+%H:%M:%S') spanek: $*" >> "$LOG"; }
 
@@ -25,10 +29,12 @@ hdmi() {   # 0 = zapnout, 3 = vypnout (DRM DPMS)
 spat() {
     log "usinam ($SER)"
     sudo systemctl stop stanice.service
-    A settings put secure power_button_instantly_locks 0          # Samsung bere KEYCODE_SLEEP jako vypinac
-    A settings put secure lock_screen_lock_after_timeout 1800000  # 30 min = max, ktere Samsung prijme
     A svc wifi disable
-    A input keyevent KEYCODE_SLEEP
+    if [ -n "$SER" ]; then
+        scrcpy -s "$SER" --turn-screen-off --stay-awake --no-video --no-audio --no-window \
+            >> "$LOG" 2>&1 &
+        echo $! > "$PIDF"
+    fi
     sleep 1
     hdmi 3
     touch "$STAV"
@@ -36,6 +42,8 @@ spat() {
 
 vzbudit() {
     log "probouzim ($SER)"
+    [ -f "$PIDF" ] && { kill "$(cat "$PIDF")" 2>/dev/null; rm -f "$PIDF"; }
+    sleep 1
     hdmi 0
     A svc wifi enable
     A input keyevent KEYCODE_WAKEUP

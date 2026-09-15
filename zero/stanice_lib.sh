@@ -83,6 +83,25 @@ vratit() {
     log "vraceno $SER: $(sh_ wm size | tr '\n' ' ')"
 }
 
+# Zamykaci obrazovka Samsungu je pres scrcpy cerna (FLAG_SECURE), gesto se zadava na
+# telefonu. Kdyz je zamceno, rozsvitit panel telefonu; po odemknuti zpet na minimum.
+JAS_ZAMEK=${JAS_ZAMEK:-160}
+hlidat_zamek() {
+    local stav minule=""
+    while sleep 3; do
+        stav=$(adb -s "$SER" shell dumpsys trust 2>/dev/null | grep -o -m1 'deviceLocked=[01]')
+        [ -z "$stav" ] && continue
+        if [ "$stav" != "$minule" ]; then
+            if [ "$stav" = "deviceLocked=1" ]; then
+                sput system screen_brightness $JAS_ZAMEK; log "zamceno - panel telefonu rozsvicen pro gesto"
+            else
+                sput system screen_brightness 1;          log "odemceno - panel telefonu na minimum"
+            fi
+            minule=$stav
+        fi
+    done
+}
+
 hlidac_zije() {
     local pid
     pid=$(sh_ cat /data/local/tmp/stanice_hlidac.pid 2>/dev/null)

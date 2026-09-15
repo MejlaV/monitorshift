@@ -31,6 +31,9 @@ while true; do
     # kazdou minutu overit, ze hlidac v telefonu zije; kdyz ne, nasadit znovu
     ( while sleep 60; do hlidac_zije || { log "hlidac nezije, nasazuji znovu"; nasadit_hlidac; }; done ) &
     WD=$!
+    # zamceno -> rozsvitit panel telefonu (gesto je pres scrcpy cerne), odemceno -> zpet na minimum
+    hlidat_zamek &
+    ZM=$!
 
     log "zrcadlim $SER ($MODEL)"
     scrcpy -s "$SER" --verbosity=info \
@@ -40,7 +43,7 @@ while true; do
         --audio-codec=opus --audio-bit-rate=64K \
         >> "$LOG" 2>&1
     RC=$?
-    kill $WD 2>/dev/null; wait $WD 2>/dev/null
+    kill $WD $ZM 2>/dev/null; wait $WD $ZM 2>/dev/null
     log "scrcpy skoncil (kod $RC), cekam na dalsi zarizeni"
     sleep 2
 done
